@@ -54,8 +54,13 @@ io.on("connect", (socket) => {
   console.log("User Connected", socket.id);
   socket.emit("welcm", `Welcome! ${socket.id}`);
   socket.on("msg", (s) => {
+    console.log(s);
     // Use socket.broadcast.emit to broadcast to all clients except the sender
-    socket.broadcast.emit("respond", s);
+    socket.to(s.roomId).emit("respond", s.input);
+  });
+
+  socket.on("join-room", (id) => {
+    socket.join(id);
   });
 });
 

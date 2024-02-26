@@ -17,6 +17,8 @@ const App = () => {
   // const res = [];
   const [message, setMessage] = useState([]);
   const [socketId, setSocketId] = useState();
+  const [roomId, setRoomId] = useState();
+  const [createRoom, setCreateRoom] = useState();
   const [input, setInput] = useState();
 
   // const socket = io("http://localhost:3000");
@@ -41,9 +43,14 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // res.push(input);
-    socket.emit("msg", input);
+    socket.emit("msg", { input, roomId });
     // console.log(res);
     setInput("");
+  };
+
+  const handleRoom = (e) => {
+    e.preventDefault();
+    socket.emit("join-room", createRoom);
   };
 
   // useEffect(() => {
@@ -56,6 +63,16 @@ const App = () => {
     <div>
       <h1>{socketId}</h1>
 
+      <form onSubmit={handleRoom}>
+        <input
+          type="text"
+          value={createRoom}
+          onChange={(e) => setCreateRoom(e.target.value)}
+          className=" border-4 border-orange-700 "
+        />
+        <button>Create Room</button>
+      </form>
+
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -63,6 +80,17 @@ const App = () => {
           className=" border-2  border-bg-orange-700 "
           onChange={(e) => setInput(e.target.value)}
         />
+
+        {/* <form> */}
+        <input
+          type="text"
+          value={roomId}
+          onChange={(e) => setRoomId(e.target.value)}
+          className=" border-4 border-orange-700 "
+        />
+        {/* <button>in Room</button>
+        </form> */}
+
         <button>Submit</button>
       </form>
       {message.map((item, index) => {
