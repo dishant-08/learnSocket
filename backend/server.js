@@ -52,6 +52,11 @@ const io = new SocketIOServer(
 
 io.on("connect", (socket) => {
   console.log("User Connected", socket.id);
+  socket.emit("welcm", `Welcome! ${socket.id}`);
+  socket.on("msg", (s) => {
+    // Use socket.broadcast.emit to broadcast to all clients except the sender
+    socket.broadcast.emit("respond", s);
+  });
 });
 
 // Your socket.io server logic here
